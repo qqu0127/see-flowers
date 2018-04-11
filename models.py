@@ -73,10 +73,15 @@ def baseline_model():
 
 def getDataGen(data_aug = True):
 	if data_aug:
-		idg = ImageDataGenerator(rotation_range=30., shear_range=0.2, zoom_range=0.2, horizontal_flip=True)
+		idg = ImageDataGenerator(
+			rescale=1./255, 
+			rotation_range=30., 
+			shear_range=0.2, 
+			zoom_range=0.2, 
+			horizontal_flip=True)
 	else:
-		idg = ImageDataGenerator()
-	idg.mean = np.array([103.939, 116.779, 123.68], dtype=np.float32).reshape((3, 1, 1))
+		idg = ImageDataGenerator(rescale=1./255)
+	#idg.mean = np.array([103.939, 116.779, 123.68], dtype=np.float32).reshape((3, 1, 1))
 	return idg
 
 def getTrainData(batch_size = 32, data_aug = True, target_size = (224, 224)):
@@ -87,8 +92,8 @@ def getValData(batch_size = 32, data_aug = True, target_size = (224, 224)):
 	idg = getDataGen(data_aug = data_aug)
 	return idg.flow_from_directory(config.val_dir, batch_size=batch_size, target_size = target_size)
 
-def getTestData(data_aug = False, target_size = (224, 224)):
-	idg = getDataGen(data_aug = data_aug)
+def getTestData(target_size = (224, 224)):
+	idg = getDataGen(data_aug = False)
 	return idg.flow_from_directory(config.test_dir, target_size = target_size)
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import models
 import keras
 from keras.callbacks import ModelCheckpoint
 import os
-from keras.callbacks import History
+from keras.callbacks import History, EarlyStopping
 from keras.optimizers import Adam
 os.environ['MKL_NUM_THREADS'] = '16'
 os.environ['GOTO_NUM_THREADS'] = '16'
@@ -23,13 +23,14 @@ model.compile(loss=keras.losses.categorical_crossentropy,
 filename = model.name + "_best.hdf5"
 checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 history = History()
+early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=10, verbose=0, mode='auto')
 
-callbacks_list = [checkpoint, history]
+callbacks_list = [checkpoint, history, early_stopping]
 
 model.fit_generator(
 	train_data,
 	steps_per_epoch=train_data.n // batch_size,
-	epochs=500,
+	epochs=100,
 	validation_steps=val_data.n // batch_size,
 	callbacks=callbacks_list,
 	validation_data=val_data,
