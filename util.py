@@ -2,7 +2,7 @@ import os
 import numpy as np
 import config
 from sklearn.metrics import confusion_matrix
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from shutil import copyfile, rmtree
 from urllib import urlretrieve
 import matplotlib.image as mpimg
@@ -39,7 +39,7 @@ def load_process_data(path, img_size = (224, 224), RESCALE = True):
             X.append(img_re)
             y.append(int(n))
     return X, y
-
+'''
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
                           title='Confusion matrix',
@@ -73,3 +73,4 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+    '''
