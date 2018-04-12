@@ -14,14 +14,6 @@ from keras.callbacks import History, EarlyStopping, ModelCheckpoint
 from keras.optimizers import Adam
 
 
-def get_bottleneck(model, train_gen, val_gen):
-	print("compute training data...")
-	bottleneck_features_train = model.predict_generator(train_gen, train_gen.n)
-	np.save(open('bottleneck_features_train.npy', 'w'), bottleneck_features_train)
-	print("compute validation data...")
-	bottleneck_features_val = model.predict_generator(val_gen, val_gen.n)
-	np.save(open('bottleneck_features_val.npy', 'w'), bottleneck_features_val)
-
 os.environ['MKL_NUM_THREADS'] = '16'
 os.environ['GOTO_NUM_THREADS'] = '16'
 os.environ['OMP_NUM_THREADS'] = '16'
@@ -34,12 +26,18 @@ val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
 test_gen = models.getTestData(target_size = input_shape)
 
 model = models.getVGG16()
+model.load_weights('trained/vgg16_best.hdf5')
+
+# set the top 8 layers trainable, fine tune these with very little training rate
+for layer in model.layers[-8:]:
+	layer.trainable = True
+
 model.compile(
 	loss=keras.losses.categorical_crossentropy,
-	optimizer=Adam(lr=1e-5),
+	optimizer=Adam(lr=2e-6),
 	metrics=['accuracy'])
 
-filename = model.name + "_best.hdf5"
+filename = model.name + "_fine_tune_top_8.hdf5"
 checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 history = History()
 early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=30, verbose=0, mode='auto')
@@ -56,7 +54,7 @@ model.fit_generator(
 	)
 
 
-filename = model.name + "_history"
+filename = model.name + "_fine_tune_top_8_history"
 with open(config.trained_dir + filename, 'wb') as file_pi:
 	pickle.dump(history.history, file_pi)
 
@@ -65,4 +63,3 @@ print("Complete training.\n")
 print("Metrics: ")
 print(model.metrics_names)
 model.evaluate_generator(generator=test_gen, use_multiprocessing=True, workers=6)
-

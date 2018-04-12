@@ -44,6 +44,7 @@ with open(config.trained_dir + filename, 'wb') as file_pi:
 
 print("Complete training.\n")
 
-print("Metrics: \n" + model.metrics_names)
+print("Metrics: ")
+print(model.metrics_names)
 model.evaluate_generator(generator=test_gen, use_multiprocessing=True, workers=6)
 
