@@ -63,6 +63,6 @@ idx_train = setid['trnid'][0] - 1
 idx_test = setid['tstid'][0] - 1
 idx_valid = setid['valid'][0] - 1
 
-util.move_files('train', labels[idx_test, :])
-util.move_files('test', labels[idx_train, :])
+util.move_files('test', labels[idx_test, :])
+util.move_files('train', labels[idx_train, :])
 util.move_files('valid', labels[idx_valid, :])

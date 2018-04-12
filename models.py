@@ -25,13 +25,14 @@ def getVGG16(new_layer_size=4096, new_layer_name='fc2'):
 	model = Model(inputs=base.input, outputs=x, name='vgg16')
 	return model
 
-def getInceptionV3(new_layer_size=1024, new_layer_name='fc1'):
-	base = InceptionV3(weights='imagenet', include_top = False, input_tensor=Input(shape=(229, 229, 3)))
-	for layer in base.layers:
+def getInceptionV3(new_layer_size=4096, new_layer_name='fc1'):
+	base = InceptionV3(weights='imagenet', include_top = False, input_tensor=Input(shape=(299, 299, 3)))
+	for layer in base.layers[-5:]:
 		layer.trainable = False
 	x = base.output
 	x = GlobalAveragePooling2D(name='avg_pool')(x)
-	x = Dense(new_layer_size, activation='softmax', name=new_layer_name)(x)
+	x = Dense(new_layer_size, activation='elu', name=new_layer_name)(x)
+	x = Dropout(0.5)(x)
 	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
 	model = Model(inputs=base.input, outputs=x, name='inception-v3')
