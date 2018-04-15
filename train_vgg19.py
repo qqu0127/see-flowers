@@ -5,13 +5,14 @@ import os
 import numpy as np
 import pickle
 
-from keras.applications.vgg16 import VGG16
+from keras.applications.vgg19 import VGG19
 from keras.layers import *
 from keras.models import Model, Sequential
 from keras.utils import plot_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import History, EarlyStopping, ModelCheckpoint
 from keras.optimizers import Adam
+ave(open('bottleneck_features_val.npy', 'w'), bottleneck_features_val)
 
 os.environ['MKL_NUM_THREADS'] = '16'
 os.environ['GOTO_NUM_THREADS'] = '16'
@@ -24,7 +25,7 @@ train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_sha
 val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
 test_gen = models.getTestData(target_size = input_shape)
 
-model = models.getVGG16()
+model = models.getVGG19()
 	
 model.compile(
 	loss=keras.losses.categorical_crossentropy,
@@ -58,3 +59,4 @@ print("Metrics: ")
 print(model.metrics_names)
 met = model.evaluate_generator(generator=test_gen, use_multiprocessing=True, workers=6)
 print(met)
+

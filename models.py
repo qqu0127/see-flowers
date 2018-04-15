@@ -1,5 +1,6 @@
 import keras
 from keras.applications.vgg16 import VGG16
+from keras.applications.vgg19 import VGG19
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.resnet50 import ResNet50
 
@@ -24,6 +25,22 @@ def getVGG16(new_layer_size=4096, new_layer_name='fc2'):
 
 	model = Model(inputs=base.input, outputs=x, name='vgg16')
 	return model
+
+def getVGG19(new_layer_size=4096, new_layer_name='fc2'):
+	base = VGG19(weights='imagenet', include_top=False, input_tensor=Input(shape=(224, 224, 3)))
+	for layer in base.layers:
+		layer.trainable = False
+	x = base.output
+	x = Flatten(name='flatten')(x)
+	x = Dense(4096, activation='relu', name='fc1')(x)
+	x = Dropout(0.6)(x)
+	x = Dense(4096, activation='relu', name='fc2')(x)
+	x = Dropout(0.6)(x)
+	x = Dense(classes, activation='softmax', name='predictions')(x)
+
+	model = Model(input=base.input, outputs=x, name='vgg19')
+	return model
+
 
 def getInceptionV3(new_layer_size=4096, new_layer_name='fc1'):
 	base = InceptionV3(weights='imagenet', include_top = False, input_tensor=Input(shape=(299, 299, 3)))
