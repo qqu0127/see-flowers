@@ -83,7 +83,7 @@ def baseline_model():
 	x = Flatten(name='flatten')(x)
 	x = Dense(1024, activation='relu', name='fc1')(x)
 	x = Dropout(0.25)(x)
-	x = Dense(102, activation='softmax', name='fc2')(x)
+	x = Dense(102, activation='softmax', name='predictions')(x)
 
 	model = Model(inputs=img_input, outputs=x, name='baseline_model')
 	return model

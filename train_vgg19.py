@@ -12,7 +12,6 @@ from keras.utils import plot_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import History, EarlyStopping, ModelCheckpoint
 from keras.optimizers import Adam
-ave(open('bottleneck_features_val.npy', 'w'), bottleneck_features_val)
 
 os.environ['MKL_NUM_THREADS'] = '16'
 os.environ['GOTO_NUM_THREADS'] = '16'
