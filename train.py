@@ -6,6 +6,7 @@ import sys
 import argparse
 import numpy as np
 import pickle
+from keras import backend as K
 
 from keras.layers import *
 from keras.models import Model, Sequential
@@ -132,7 +133,7 @@ def train_inception_v3():
 	met = model.evaluate_generator(generator=test_gen, use_multiprocessing=True, workers=6)
 	print(met)
 	return met
-	
+
 def train_baseline_model():
 	input_shape = (32, 32)
 	batch_size = 32
@@ -183,5 +184,6 @@ if __name__ == "__main__":
 		config.MODEL_BASELINE: train_baseline_model(),
 		config.MODEL_RESNET50: train_resnet50()
 	}[args.model]
+	K.clear_session()
 
 
