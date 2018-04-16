@@ -36,7 +36,7 @@ def getVGG19(new_layer_size=4096, new_layer_name='fc2'):
 	x = Dropout(0.6)(x)
 	x = Dense(4096, activation='relu', name='fc2')(x)
 	x = Dropout(0.6)(x)
-	x = Dense(classes, activation='softmax', name='predictions')(x)
+	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
 	model = Model(input=base.input, outputs=x, name='vgg19')
 	return model
@@ -44,7 +44,7 @@ def getVGG19(new_layer_size=4096, new_layer_name='fc2'):
 
 def getInceptionV3(new_layer_size=4096, new_layer_name='fc1'):
 	base = InceptionV3(weights='imagenet', include_top = False, input_tensor=Input(shape=(299, 299, 3)))
-	for layer in base.layers[-5:]:
+	for layer in base.layers:
 		layer.trainable = False
 	x = base.output
 	x = GlobalAveragePooling2D(name='avg_pool')(x)
@@ -55,15 +55,13 @@ def getInceptionV3(new_layer_size=4096, new_layer_name='fc1'):
 	model = Model(inputs=base.input, outputs=x, name='inception-v3')
 	return model
 
-def getResNet50(new_layer_size=2048, new_layer_name='fc1'):
+def getResNet50(new_layer_size=4096, new_layer_name='fc1'):
 	base = ResNet50(weights='imagenet', include_top=False, input_tensor=Input(shape=(224, 224, 3)))
 	for layer in base.layers:
 		layer.trainable = False
 	x = base.output
 	x = Flatten(name='flatten')(x)
-	x = Dropout(0.5)(x)
-	x = Dense(new_layer_size, activation='elu', name=new_layer_name)(x)
-	x = Dropout(0.5)(x)
+	x = Dropout(0.7)(x)
 	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
 	model = Model(inputs=base.input, outputs=x, name='ResNet50')

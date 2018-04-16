@@ -11,11 +11,12 @@ train_dir = None
 val_dir = None
 test_dir = None
 
-MODEL_VGG16 = 'vgg16'
-MODEL_VGG19 = 'vgg19'
-MODEL_INCEPTION_V3 = 'inception_v3'
-MODEL_RESNET50 = 'resnet50'
-MODEL_RESNET152 = 'resnet152'
+MODEL_VGG16 = "vgg16"
+MODEL_VGG19 = "vgg19"
+MODEL_INCEPTION_V3 = "inception_v3"
+MODEL_RESNET50 = "resnet50"
+MODEL_RESNET152 = "resnet152"
+MODEL_BASELINE = "baseline"
 
 MODEL_LIST = [MODEL_VGG16, MODEL_VGG19, MODEL_INCEPTION_V3, MODEL_RESNET50, MODEL_RESNET152]
 

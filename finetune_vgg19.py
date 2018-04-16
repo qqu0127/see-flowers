@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pickle
 
-from keras.applications.vgg16 import VGG16
 from keras.layers import *
 from keras.models import Model, Sequential
 from keras.utils import plot_model
@@ -13,23 +12,17 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import History, EarlyStopping, ModelCheckpoint
 from keras.optimizers import Adam
 
-
-os.environ['MKL_NUM_THREADS'] = '16'
-os.environ['GOTO_NUM_THREADS'] = '16'
-os.environ['OMP_NUM_THREADS'] = '16'
-os.environ['openmp'] = 'True'
-
 input_shape = (224, 224)
 batch_size = 32
 train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_shape)
 val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
 test_gen = models.getTestData(target_size = input_shape)
 
-model = models.getVGG16()
-model.load_weights('trained/vgg16_best.hdf5')
+model = models.getVGG19()
+model.load_weights('trained/vgg19_best.hdf5')
 
 # set the top 8 layers trainable, fine tune these with very little training rate
-for layer in model.layers[-8:]:
+for layer in model.layers[-12:]:
 	layer.trainable = True
 
 model.compile(
