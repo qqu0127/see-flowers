@@ -1,11 +1,17 @@
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
+from vis.utils import utils as vutils
+from keras import activations
+from vis.visualization import visualize_activation
+
 import os
 import numpy as np
 import config
-from sklearn.metrics import confusion_matrix
-#import matplotlib.pyplot as plt
+import pickle
 from shutil import copyfile, rmtree
 from urllib import urlretrieve
-import matplotlib.image as mpimg
 from skimage.transform import resize, rescale
 
 def download_file(url, dest=None, data_path = 'data'):
@@ -39,6 +45,52 @@ def load_process_data(path, img_size = (224, 224), RESCALE = True):
             X.append(img_re)
             y.append(int(n))
     return X, y
+
+def vis_max(model, save_path):
+    '''
+        Generate the input image that maximizes the response of each class in the final FC layer
+        Please also see keras-vis for details.
+    '''
+    layer_idx = vutils.find_layer_idx(model, 'predictions')
+    model.layers[layer_idx].activation = activations.linear
+    model = vutils.apply_modifications(model)
+    for ind in range(len(config.classes)):
+        print 'Generating for class {}'.format(ind)
+        plt.rcParams['figure.figsize'] = (18, 6)
+        img = visualize_activation(model, layer_idx, filter_indices=ind)
+        mpimg.imsave(save_path + str(ind) + ".png", img)
+    print('Done')
+
+def draw_learning_curve(input_path, save_path, model_name):
+    '''
+        Draw the learning curve from stored history file archieved using pickle.
+        The history file is expected to be a dict, 
+            keys: {'acc', 'val_acc', loss', 'val_loss'}
+        Generate two .png images and save to save_path.
+
+    '''
+    with open(input_path, 'rb') as fid:
+        h = pickle.load(fid)
+    plt.plot(h['acc'])
+    plt.plot(h['val_acc'])
+    plt.title(model_name + ' model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig(save_path + '/' + model_name + '_acc.png')
+    plt.close()
+
+    plt.plot(h['loss'])
+    plt.plot(h['val_loss'])
+    plt.title(model_name + ' model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig(save_path + '/' + model_name + '_loss.png')
+    plt.close()
+
+
+
 '''
 def plot_confusion_matrix(cm, classes,
                           normalize=False,

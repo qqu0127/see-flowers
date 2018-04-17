@@ -118,7 +118,7 @@ def train_inception_v3():
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getInceptionV3()
-	for layer in model.layers[-5:]:
+	for layer in model.layers:
 		layer.trainable = True
 
 	model.compile(
