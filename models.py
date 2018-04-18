@@ -67,7 +67,7 @@ def getResNet50(new_layer_size=4096, new_layer_name='fc1'):
 	model = Model(inputs=base.input, outputs=x, name='ResNet50')
 	return model
 
-def baseline_model():
+def getBaseline():
 	img_input = Input(shape=(32, 32, 3))
 	x = Conv2D(16, (3, 3), activation = 'relu', padding='same', name='conv1_1')(img_input)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='maxpooling_1')(x)
@@ -126,13 +126,4 @@ if __name__ == '__main__':
         epochs=50,
         validation_data=val_data,
         validation_steps=800)
-
-
-'''
-def train(model, train_data):
-	model.fit_generator(
-		train_data,
-		steps_per_epoch = 
-		)
-'''
 

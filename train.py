@@ -42,11 +42,11 @@ def train_vgg16():
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getVGG16()
-	for layer in model.layers[-8:]:
+	for layer in model.layers[-12:]:
 		layer.trainable = True
 	model.compile(
 		loss=keras.losses.categorical_crossentropy,
-		optimizer=Adam(lr=1e-4),
+		optimizer=Adam(lr=1e-5),
 		metrics=['accuracy'])
 	filename = model.name + "_best.hdf5"
 	callbacks_list, history = get_callbacks(filename)
@@ -79,11 +79,11 @@ def train_vgg19():
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getVGG19()
-	for layer in model.layers[-8:]:
+	for layer in model.layers[-12:]:
 		layer.trainable = True
 	model.compile(
 		loss=keras.losses.categorical_crossentropy,
-		optimizer=Adam(lr=1e-4),
+		optimizer=Adam(lr=1e-5),
 		metrics=['accuracy'])
 
 	filename = model.name + "_best.hdf5"
@@ -196,22 +196,22 @@ def train_baseline_model():
 	val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
 	test_gen = models.getTestData(target_size = input_shape)
 
-	model = models.baseline_model()
+	model = models.getBaseline()
 	model.compile(loss=keras.losses.categorical_crossentropy,
-		optimizer='rmsprop',
+		optimizer=Adam(lr=1e-2, decay = 0.3),
 		metrics=['accuracy'])
 
 	filename = model.name + "_best.hdf5"
 	checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 	history = History()
-	early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=10, verbose=0, mode='auto')
+	early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=30, verbose=0, mode='auto')
 
 	callbacks_list = [checkpoint, history, early_stopping]
 	print("Start training " + model.name)
 	model.fit_generator(
 		train_gen,
 		steps_per_epoch=train_gen.n // batch_size,
-		epochs=100,
+		epochs=300,
 		validation_steps=val_gen.n // batch_size,
 		callbacks=callbacks_list,
 		validation_data=val_gen,
