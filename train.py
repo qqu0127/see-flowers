@@ -17,12 +17,7 @@ from keras.optimizers import Adam
 
 def parse_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--model', type=str, required=True, help='Base model architecture', choices=[
-		config.MODEL_RESNET50,
-		config.MODEL_RESNET152,
-		config.MODEL_INCEPTION_V3,
-		config.MODEL_VGG16,
-		config.MODEL_VGG19])
+	parser.add_argument('--model', type=str, required=True, help='Base model architecture', choices=config.MODEL_LIST)
 	return parser.parse_args()
 
 
