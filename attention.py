@@ -37,8 +37,8 @@ mpimg.imsave("./trained/temp/grads.png", grads)
 
 heatmap = visualize_cam(model, layer_idx, filter_indices=20, 
 	seed_input=img, backprop_modifier=modifier)
-jet_heatmap = np.uint8(cm.jet(heatmap)[..., :3] * 255)
-overlay(jet_heatmap, img)
+
+heatmap = overlay(heatmap / 255.0, img)
 
 mpimg.imsave("./trained/temp/heatmap.png", heatmap)
 
