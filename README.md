@@ -31,27 +31,6 @@ keras 2
 ### Baseline model
 A simple 2-layer baseline convnet.  
 acc: 0.312  
-<<<<<<< HEAD
-<img src="./img/learning%20curves/baseline_acc.png?raw=true">
-<img src="./img/learning%20curves/baseline_loss.png?raw=true">
-### VGG16
-Fine tune VGG16 with weights pretrained on imagenet.  
-acc: 0.757
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/vgg16_acc.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/vgg16_loss.png">
-
-### VGG19
-Fine tune VGG19 with weights pretrained on imagenet.  
-acc: 0.734
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/vgg19_acc.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/vgg19_loss.png">
-
-### Inception-v3
-Fine tune VGG19 with weights pretrained on imagenet.  
-acc: 0.892
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/inception-v3_acc.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/inception-v3_loss.png">
-=======
 <img src="./img/learning%20curves/baseline_acc.png" width=400>
 <img src="./img/learning%20curves/baseline_loss.png" width=400>
 ### VGG16
@@ -71,7 +50,6 @@ Fine tune VGG19 with weights pretrained on imagenet.
 acc: 0.892  
 <img src="./img/learning%20curves/inception-v3_acc.png" width=400>
 <img src="./img/learning%20curves/inception-v3_loss.png" width=400>
->>>>>>> 5d934fe9e2da556678e800307d3358c8037da1da
 
 ## Visualization
 ### original image
