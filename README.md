@@ -53,15 +53,9 @@ acc: 0.892
 
 ## Visualization
 ### original image
-<img src="./img/vis/0_original.png">
-<img src="./img/vis/4_original.png">
-<img src="./img/vis/8_original.png">
+<img src="./img/vis/0_original.png" width=200 /><img src="./img/vis/4_ori.png" width=200 /><img src="./img/vis/8_ori.png" width=200 />
 
 ### saliency
-<img src="./img/vis/0_saliency.png">
-<img src="./img/vis/4_saliency.png">
-<img src="./img/vis/8_saliency.png">
+<img src="./img/vis/0_saliency.png" width=200 /><img src="./img/vis/4_saliency.png" width=200 /><img src="./img/vis/8_saliency.png" width=200 />
 ### heatmap]
-<img src="./img/vis/0_heatmap.png">
-<img src="./img/vis/4_heatmap.png">
-<img src="./img/vis/8_heatmap.png">
+<img src="./img/vis/0_heatmap.png" width=200 /><img src="./img/vis/4_heatmap.png" width=200 /><img src="./img/vis/8_heatmap.png" width=200 />
