@@ -1,8 +1,9 @@
 # see-flowers
-# On the fine grained flower classification with small sample data
+# Flower Classification with Small Sample Data Using Deep Convolutional Neural Networks
 
 ## Overview
-This repo provides code and my work on flower image classification using deep convnet. I trained serveral models on VGG 102 flower dataset and better the previous state-of-art result, 0.868. The best top-1 accuracy achieved so far: 0.892.
+This repo provides code and my work on flower image classification using deep convnet. I trained serveral models on VGG 102 flower dataset and better the previous state-of-art result, 0.868.  
+The best top-1 accuracy achieved so far: 0.892.
 
 ## Objectives
 * Study the transfer learning on mulitclass, fine grained image classification task.
@@ -29,3 +30,4 @@ Fine tune VGG19 with weights pretrained on imagenet.
 acc: 0.892
 
 ## Visualization
+...
