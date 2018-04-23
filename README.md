@@ -2,8 +2,12 @@
 # Flower Classification with Small Sample Data Using Deep Convolutional Neural Networks
 
 ## Overview
-This repo provides code and my work on flower image classification using deep convnet. I trained serveral models on [VGG 102 flower dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/) and better the previous state-of-art result, 0.868.  
-The best top-1 accuracy achieved so far: 0.892.
+This repo provides my work on flower image classification using deep convnet. I trained serveral models on [VGG 102 flower dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/) and better the previous state-of-art result, 0.868.  
+The best top-1 accuracy achieved so far: 0.892.  
+Note here that I follow the official protocol for dataset split.  
+* training: 1020  
+* validation: 1020  
+* test: 6149  
 
 ## Objectives
 * Study the transfer learning on mulitclass, fine grained image classification task.
@@ -52,10 +56,10 @@ acc: 0.892
 <img src="./img/learning%20curves/inception-v3_loss.png" width=400>
 
 ## Visualization
-### original image
+### original
 <img src="./img/vis/0_original.png" width=200 /><img src="./img/vis/4_ori.png" width=200 /><img src="./img/vis/8_ori.png" width=200 />
 
 ### saliency
 <img src="./img/vis/0_saliency.png" width=200 /><img src="./img/vis/4_saliency.png" width=200 /><img src="./img/vis/8_saliency.png" width=200 />
-### heatmap]
+### heatmap
 <img src="./img/vis/0_heatmap.png" width=200 /><img src="./img/vis/4_heatmap.png" width=200 /><img src="./img/vis/8_heatmap.png" width=200 />
