@@ -31,6 +31,7 @@ keras 2
 ### Baseline model
 A simple 2-layer baseline convnet.  
 acc: 0.312  
+<<<<<<< HEAD
 <img src="./img/learning%20curves/baseline_acc.png?raw=true">
 <img src="./img/learning%20curves/baseline_loss.png?raw=true">
 ### VGG16
@@ -50,17 +51,39 @@ Fine tune VGG19 with weights pretrained on imagenet.
 acc: 0.892
 <img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/inception-v3_acc.png">
 <img src="https://github.com/qqu0127/see-flowers/blob/master/img/learning%20curves/inception-v3_loss.png">
+=======
+<img src="./img/learning%20curves/baseline_acc.png" width=400>
+<img src="./img/learning%20curves/baseline_loss.png" width=400>
+### VGG16
+Fine tune VGG16 with weights pretrained on imagenet.  
+acc: 0.757  
+<img src="./img/learning%20curves/vgg16_acc.png" width=400>
+<img src="./img/learning%20curves/vgg16_loss.png" width=400>
+
+### VGG19
+Fine tune VGG19 with weights pretrained on imagenet.  
+acc: 0.734  
+<img src="./img/learning%20curves/vgg19_acc.png" width=400>
+<img src="./img/learning%20curves/vgg19_loss.png" width=400>
+
+### Inception-v3
+Fine tune VGG19 with weights pretrained on imagenet.  
+acc: 0.892  
+<img src="./img/learning%20curves/inception-v3_acc.png" width=400>
+<img src="./img/learning%20curves/inception-v3_loss.png" width=400>
+>>>>>>> 5d934fe9e2da556678e800307d3358c8037da1da
 
 ## Visualization
 ### original image
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/0_original.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/4_ori.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/8_ori.png">
+<img src="./img/vis/0_original.png">
+<img src="./img/vis/4_original.png">
+<img src="./img/vis/8_original.png">
+
 ### saliency
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/0_saliency.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/4_saliency.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/8_saliency.png">
+<img src="./img/vis/0_saliency.png">
+<img src="./img/vis/4_saliency.png">
+<img src="./img/vis/8_saliency.png">
 ### heatmap]
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/0_heatmap.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/4_heatmap.png">
-<img src="https://github.com/qqu0127/see-flowers/blob/master/img/vis/8_heatmap.png">
+<img src="./img/vis/0_heatmap.png">
+<img src="./img/vis/4_heatmap.png">
+<img src="./img/vis/8_heatmap.png">
