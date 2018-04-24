@@ -45,7 +45,7 @@ acc: 0.757
 
 ### VGG19
 Fine tune VGG19 with weights pretrained on imagenet.  
-acc: 0.734  
+acc: 0.781  
 <img src="./img/learning%20curves/vgg19_acc.png" width=400>
 <img src="./img/learning%20curves/vgg19_loss.png" width=400>
 
