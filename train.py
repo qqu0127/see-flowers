@@ -22,68 +22,86 @@ def parse_args():
 
 
 def get_callbacks(filename):
-	checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+	checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
 	history = History()
-	early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=30, verbose=0, mode='auto')
+	early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.002, patience=20, verbose=0, mode='auto')
 	callbacks_list = [checkpoint, history, early_stopping]
 
 	return callbacks_list, history
 
 def train_vgg16():
 	input_shape = (224, 224)
-	batch_size = 32
+	batch_size = 16
 	train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_shape)
-	val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
-	test_gen = models.getTestData(target_size = input_shape)
+	val_gen = models.getValData(batch_size, data_aug=False, target_size=input_shape)
+	
 
 	model = models.getVGG16()
 	for layer in model.layers[-12:]:
 		layer.trainable = True
 	model.compile(
 		loss=keras.losses.categorical_crossentropy,
-		optimizer=Adam(lr=1e-5),
+		optimizer=keras.optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True),
 		metrics=['accuracy'])
-	filename = model.name + "_best.hdf5"
+	filename = model.name + "_reverse_424.hdf5"
 	callbacks_list, history = get_callbacks(filename)
 
 	print("Start training " + model.name)
 	model.fit_generator(
 		train_gen,
 		steps_per_epoch=train_gen.n // batch_size,
-		epochs=200, 
+		epochs=400, 
 		validation_steps=val_gen.n // batch_size,
 		callbacks=callbacks_list,
 		validation_data=val_gen,
 		)
-	filename = model.name + "_history"
+	filename = model.name + "_history_reverse_424"
 	with open(config.trained_dir + filename, 'wb') as file_pi:
 		pickle.dump(history.history, file_pi)
 	print("Complete training.")
 
 	print("Metrics: ")
 	print(model.metrics_names)
+	test_gen = models.getTestData(target_size = input_shape)
 	met = model.evaluate_generator(generator=test_gen, use_multiprocessing=True, workers=6)
 	print(met)
 	return met
 
 def train_vgg19():
 	input_shape = (224, 224)
-	batch_size = 32
+	batch_size = 16
 	train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_shape)
-	val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
+	val_gen = models.getValData(batch_size, data_aug=False, target_size=input_shape)
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getVGG19()
-	for layer in model.layers[-12:]:
+	filename = model.name + "_reverse_424.hdf5"
+	callbacks_list, history = get_callbacks(filename)
+	print("Start training " + model.name)
+
+	for layer in model.layers[-3:]:
+		layer.trainable = True
+	model.compile(
+		loss=keras.losses.categorical_crossentropy,
+		optimizer=Adam(lr=1e-4),
+		metrics=['accuracy'])
+	model.fit_generator(
+		train_gen,
+		steps_per_epoch=train_gen.n // batch_size,
+		epochs=2, 
+		validation_steps=val_gen.n // batch_size,
+		callbacks=callbacks_list,
+		validation_data=val_gen,
+		)
+
+	for layer in model.layers:
 		layer.trainable = True
 	model.compile(
 		loss=keras.losses.categorical_crossentropy,
 		optimizer=Adam(lr=1e-5),
 		metrics=['accuracy'])
 
-	filename = model.name + "_best.hdf5"
-	callbacks_list, history = get_callbacks(filename)
-	print("Start training " + model.name)
+	
 	model.fit_generator(
 		train_gen,
 		steps_per_epoch=train_gen.n // batch_size,
@@ -93,7 +111,7 @@ def train_vgg19():
 		validation_data=val_gen,
 		)
 
-	filename = model.name + "_history"
+	filename = model.name + "_history_reverse_424"
 	with open(config.trained_dir + filename, 'wb') as file_pi:
 		pickle.dump(history.history, file_pi)
 
@@ -107,12 +125,31 @@ def train_vgg19():
 
 def train_inception_v3():
 	input_shape = (299, 299)
-	batch_size = 32
+	batch_size = 16
 	train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_shape)
-	val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
+	val_gen = models.getValData(batch_size, data_aug=False, target_size=input_shape)
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getInceptionV3()
+	for layer in model.layers[-3:]:
+		layer.trainable = True
+
+	model.compile(
+		loss=keras.losses.categorical_crossentropy,
+		optimizer=Adam(lr=1e-4),
+		metrics=['accuracy'])
+
+	filename = model.name + "_best_reverse_424.hdf5"
+	callbacks_list, history = get_callbacks(filename)
+	print("Start training " + model.name)
+	model.fit_generator(
+		train_gen,
+		steps_per_epoch=train_gen.n // batch_size,
+		epochs=3, 
+		validation_steps=val_gen.n // batch_size,
+		callbacks=callbacks_list,
+		validation_data=val_gen,
+		)
 	for layer in model.layers:
 		layer.trainable = True
 
@@ -121,19 +158,16 @@ def train_inception_v3():
 		optimizer=Adam(lr=1e-5),
 		metrics=['accuracy'])
 
-	filename = model.name + "_best.hdf5"
-	callbacks_list, history = get_callbacks(filename)
-	print("Start training " + model.name)
 	model.fit_generator(
 		train_gen,
 		steps_per_epoch=train_gen.n // batch_size,
-		epochs=500, 
+		epochs=200, 
 		validation_steps=val_gen.n // batch_size,
 		callbacks=callbacks_list,
 		validation_data=val_gen,
 		)
 
-	filename = model.name + "_history"
+	filename = model.name + "_history_reverse_424"
 	with open(config.trained_dir + filename, 'wb') as file_pi:
 		pickle.dump(history.history, file_pi)
 
@@ -149,15 +183,15 @@ def train_resnet50():
 	input_shape = (224, 224)
 	batch_size = 32
 	train_gen = models.getTrainData(batch_size, data_aug=True, target_size=input_shape)
-	val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
+	val_gen = models.getValData(batch_size, data_aug=False, target_size=input_shape)
 	test_gen = models.getTestData(target_size = input_shape)
 
 	model = models.getResNet50()
-	for layer in model.layers[-20:]:
+	for layer in model.layers[-3:]:
 		layer.trainable = True
 	model.compile(
 		loss=keras.losses.categorical_crossentropy,
-		optimizer=Adam(lr=1e-5),
+		optimizer=Adam(lr=1e-4),
 		metrics=['accuracy'])
 
 	filename = model.name + "_best.hdf5"
@@ -166,7 +200,22 @@ def train_resnet50():
 	model.fit_generator(
 		train_gen,
 		steps_per_epoch=train_gen.n // batch_size,
-		epochs=200, 
+		epochs=3, 
+		validation_steps=val_gen.n // batch_size,
+		callbacks=callbacks_list,
+		validation_data=val_gen,
+		)
+
+	for layer in model.layers[80:]:
+		layer.trainable = True
+	model.compile(
+		loss=keras.losses.categorical_crossentropy,
+		optimizer=keras.optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True),
+		metrics=['accuracy'])
+	model.fit_generator(
+		train_gen,
+		steps_per_epoch=train_gen.n // batch_size,
+		epochs=400, 
 		validation_steps=val_gen.n // batch_size,
 		callbacks=callbacks_list,
 		validation_data=val_gen,
@@ -236,5 +285,3 @@ if __name__ == "__main__":
 	}
 	funcs[args.model]()
 	K.clear_session()
-
-

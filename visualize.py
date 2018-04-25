@@ -30,16 +30,16 @@ def get_act_max(model, save_path,
 		output: None
 
 	'''
-	layer_ind = vutils.find_layer_idx(model, 'predictions')
+	layer_ind = utils.find_layer_idx(model, 'predictions')
 	model.layer[layer_ind].activation = activations.linear
-	model = vutils.apply_modifications(model)
+	model = utils.apply_modifications(model)
 	for ind in class_ind:
 		print 'Generating for class {}'.format(ind)
 		img = visualize_activation(model, layer_idx, filter_indices=ind)
 		mpimg.imsave(save_path + str(ind) + ".png", img)
 	print('Done')
 
-def get_attention_map(model, img, modifier = 'guided', SAVE_FLAG = False, path = None):
+def get_attention_map(model, img, ind = None, modifier = 'guided', SAVE_FLAG = False, path = None):
 	'''
 		Given an image and a model, using keras-vis, generate the saliency map and heatmap of that image.
 		This is for the study of the decision making of classifier, which parts of the image have large 
@@ -55,13 +55,15 @@ def get_attention_map(model, img, modifier = 'guided', SAVE_FLAG = False, path =
 					that stores the saliency map and heatmap images
 
 	'''
-	if(np.mean(img) > 1):
-		img = img / 255.0
+	if(np.mean(img) < 1):
+		img = img * 255.0
 
 	layer_idx = utils.find_layer_idx(model, 'predictions')
-	grads = visualize_saliency(model, layer_idx, filter_indices = None, seed_input=img, backprop_modifier=modifier)
-	heatmap = visualize_cam(model, layer_idx, filter_indices = None, seed_input=img, backprop_modifier=modifier)
-	heatmap = overlay(heatmap / 255.0, img)
+	#model.layers[layer_idx].activation = activations.linear
+	#model = utils.apply_modifications(model)
+	grads = visualize_saliency(model, layer_idx, filter_indices = ind, seed_input=img, backprop_modifier=modifier)
+	heatmap = visualize_cam(model, layer_idx, filter_indices = ind, seed_input=img, backprop_modifier=modifier)
+	heatmap = overlay(heatmap, img)
 
 	if SAVE_FLAG:
 		mpimg.imsave(path + "original.png", img)
@@ -72,12 +74,18 @@ def get_attention_map(model, img, modifier = 'guided', SAVE_FLAG = False, path =
 
 
 if __name__ == '__main__':
-	model = models.getVGG16()
-	model.load_weights('trained/vgg16/vgg16_best_top12.hdf5')
-	path = "trained/vis/"
-	test_gen = models.getTestData(target_size = (224, 224))
-	(x_, y_) = test_gen.next()
-	img = x_[0, :,:,:]
+	vgg16 = models.getVGG16()
+	vgg16.load_weights('trained/inception-v3/inception-v3_best_412.hdf5')
+	path = "trained/vis/attention_map/inception-v3/"
 
-	get_attention_map(model, img, 'guided', True, path)
+	test_gen = models.getTestData(target_size = (299, 299))
+	(x_, y_) = test_gen.next()
+	for i in range(x_.shape[0]):
+		print("Generating " + str(i))
+		img = x_[i, :, :, ]
+		ind = np.argmax(y_[i, :])
+		res = get_attention_map(vgg16, img, None)
+		mpimg.imsave(path + str(i) + "_ori.png", img)
+		mpimg.imsave(path + str(i) + "_saliency.png", res['saliency'])
+		mpimg.imsave(path + str(i) + "_heatmap.png", res['heatmap'])
 

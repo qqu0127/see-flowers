@@ -17,9 +17,9 @@ def getVGG16(new_layer_size=4096, new_layer_name='fc2'):
 		layer.trainable = False
 	x = base.output
 	x = Flatten(name='flatten')(x)
-	x = Dense(4096, activation='elu')(x)
+	x = Dense(4096, activation='relu')(x)
 	x = Dropout(0.6)(x)
-	x = Dense(new_layer_size, activation='elu', name=new_layer_name)(x)
+	x = Dense(new_layer_size, activation='relu', name=new_layer_name)(x)
 	x = Dropout(0.6)(x)
 	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
@@ -48,8 +48,8 @@ def getInceptionV3(new_layer_size=4096, new_layer_name='fc1'):
 		layer.trainable = False
 	x = base.output
 	x = GlobalAveragePooling2D(name='avg_pool')(x)
-	x = Dense(new_layer_size, activation='elu', name=new_layer_name)(x)
-	x = Dropout(0.5)(x)
+	#x = Dense(new_layer_size, activation='elu', name=new_layer_name)(x)
+	#x = Dropout(0.7)(x)
 	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
 	model = Model(inputs=base.input, outputs=x, name='inception-v3')
@@ -61,7 +61,6 @@ def getResNet50(new_layer_size=4096, new_layer_name='fc1'):
 		layer.trainable = False
 	x = base.output
 	x = Flatten(name='flatten')(x)
-	x = Dropout(0.7)(x)
 	x = Dense(len(config.classes), activation='softmax', name='predictions')(x)
 
 	model = Model(inputs=base.input, outputs=x, name='ResNet50')
@@ -93,8 +92,13 @@ def getDataGen(data_aug = True):
 			rescale=1./255, 
 			rotation_range=30., 
 			shear_range=0.2, 
-			zoom_range=0.2, 
-			horizontal_flip=True)
+			zoom_range=0.2,
+			horizontal_flip=True,
+			width_shift_range=0.2,
+			height_shift_range=0.2,
+			zca_whitening=True,
+			vertical_flip=True
+			)
 	else:
 		idg = ImageDataGenerator(rescale=1./255)
 	#idg.mean = np.array([103.939, 116.779, 123.68], dtype=np.float32).reshape((3, 1, 1))
@@ -102,15 +106,15 @@ def getDataGen(data_aug = True):
 
 def getTrainData(batch_size = 32, data_aug = True, target_size = (224, 224)):
 	idg = getDataGen(data_aug = data_aug)
-	return idg.flow_from_directory(config.train_dir, batch_size=batch_size, target_size = target_size)
-
+	return idg.flow_from_directory(config.test_dir, batch_size=batch_size, target_size = target_size)
+	
 def getValData(batch_size = 32, data_aug = True, target_size = (224, 224)):
 	idg = getDataGen(data_aug = data_aug)
 	return idg.flow_from_directory(config.val_dir, batch_size=batch_size, target_size = target_size)
 
 def getTestData(target_size = (224, 224)):
 	idg = getDataGen(data_aug = False)
-	return idg.flow_from_directory(config.test_dir, target_size = target_size)
+	return idg.flow_from_directory(config.test_dir, target_size = target_size, shuffle = True, seed = 66)
 
 if __name__ == '__main__':
 	train_data = getTrainData(batch_size = 32, data_aug=True, target_size=(32, 32))

@@ -26,35 +26,35 @@ val_gen = models.getValData(batch_size, data_aug=True, target_size=input_shape)
 test_gen = models.getTestData(target_size = input_shape)
 
 model = models.getVGG16()
-model.load_weights('trained/vgg16_best.hdf5')
+model.load_weights('trained/vgg16/vgg16_best_top12.hdf5')
 
 # set the top 8 layers trainable, fine tune these with very little training rate
-for layer in model.layers[-8:]:
+for layer in model.layers[6:]:
 	layer.trainable = True
 
 model.compile(
 	loss=keras.losses.categorical_crossentropy,
-	optimizer=Adam(lr=2e-6),
+	optimizer=Adam(lr=1e-5),
 	metrics=['accuracy'])
 
-filename = model.name + "_fine_tune_top_8.hdf5"
+filename = model.name + "_fine_tune_top16.hdf5"
 checkpoint = ModelCheckpoint(config.trained_dir + filename, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 history = History()
-early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=30, verbose=0, mode='auto')
+early_stopping = EarlyStopping(monitor='val_acc', min_delta=0.002, patience=20, verbose=0, mode='auto')
 
 callbacks_list = [checkpoint, history, early_stopping]
 
 model.fit_generator(
 	train_gen,
 	steps_per_epoch=train_gen.n // batch_size,
-	epochs=500, 
+	epochs=100, 
 	validation_steps=val_gen.n // batch_size,
 	callbacks=callbacks_list,
 	validation_data=val_gen,
 	)
 
 
-filename = model.name + "_fine_tune_top_8_history"
+filename = model.name + "_fine_tune_top16_history"
 with open(config.trained_dir + filename, 'wb') as file_pi:
 	pickle.dump(history.history, file_pi)
 
