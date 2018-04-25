@@ -3,7 +3,7 @@
 
 ## Overview
 This repo provides my work on flower image classification using deep convnet. I trained serveral models on [VGG 102 flower dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/) and better the previous state-of-art result, 0.868.  
-The best top-1 accuracy achieved so far: 0.892.  
+The best top-1 accuracy achieved so far: 0.904.  
 Note here that I follow the official protocol for dataset split.  
 * training: 1020  
 * validation: 1020  
@@ -50,8 +50,8 @@ acc: 0.781
 <img src="./img/learning%20curves/vgg19_loss.png" width=400>
 
 ### Inception-v3
-Fine tune VGG19 with weights pretrained on imagenet.  
-acc: 0.892  
+Fine tune inception-v3 with weights pretrained on imagenet.  
+acc: 0.904  
 <img src="./img/learning%20curves/inception-v3_acc.png" width=400>
 <img src="./img/learning%20curves/inception-v3_loss.png" width=400>
 
