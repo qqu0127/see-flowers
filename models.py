@@ -114,7 +114,7 @@ def getValData(batch_size = 32, data_aug = True, target_size = (224, 224)):
 
 def getTestData(target_size = (224, 224)):
 	idg = getDataGen(data_aug = False)
-	return idg.flow_from_directory(config.test_dir, target_size = target_size, shuffle = True, seed = 66)
+	return idg.flow_from_directory(config.train_dir, target_size = target_size, shuffle = True, seed = 66)
 
 if __name__ == '__main__':
 	train_data = getTrainData(batch_size = 32, data_aug=True, target_size=(32, 32))

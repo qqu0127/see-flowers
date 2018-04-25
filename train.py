@@ -242,7 +242,7 @@ def train_baseline_model():
 
 	model = models.getBaseline()
 	model.compile(loss=keras.losses.categorical_crossentropy,
-		optimizer=Adam(lr=1e-2, decay = 0.3),
+		optimizer=Adam(lr=1e-3),
 		metrics=['accuracy'])
 
 	filename = model.name + "_best.hdf5"
