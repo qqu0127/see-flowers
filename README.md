@@ -2,7 +2,7 @@
 # Flower Classification with Small Sample Data Using Deep Convolutional Neural Networks
 
 ## Overview
-This repo provides my work on flower image classification using deep convnet. I trained serveral models on [VGG 102 flower dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/) and better the previous state-of-art result, 0.868.  
+This repo provides my work on flower image classification using deep convnet. I trained serveral models on [VGG 102 flower dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/).  
 The best top-1 accuracy achieved so far: 0.904.  
 Note here that I follow the official protocol for dataset split.  
 * training: 1020  
