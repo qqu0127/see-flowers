@@ -14,6 +14,9 @@ Note here that I follow the official protocol for dataset split.
 * Study the visualization tools and techniques for deep convnets.
 * Try to explain the convnet-based classifier using visualization.
 
+## Report
+see-flower(https://github.com/qqu0127/see-flowers/master/see-flower.pdf)  
+
 ## Usage
 * Preparation
 ```python
